@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const FeedbackForm = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -48,6 +49,8 @@ const FeedbackForm = () => {
       }, 500);
     } catch (error) {
       setStatus("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false); // Enable button after sending
     }
   };
 
@@ -142,7 +145,13 @@ const FeedbackForm = () => {
             className="textarea-field"
           ></textarea>
 
-          <button type="submit">Submit Feedback</button>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`submit-button ${loading ? "sending" : ""}`}
+          >
+            {loading ? "Sending..." : "Submit Feedback"}
+          </button>
         </form>
 
         {status && <p className="status-message">{status}</p>}
